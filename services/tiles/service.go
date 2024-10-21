@@ -2,7 +2,6 @@ package tiles
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"github.com/mattkibbler/rivers-backend/api"
@@ -21,12 +20,7 @@ func NewService(db *sql.DB) *Service {
 }
 
 func (s *Service) RegisterRoutes(server *api.ApiServer) {
-	server.Get("/test", s.handleTest)
-	server.Get("/tiles/regions", s.handleGetRegions)
-}
-
-func (s *Service) handleTest(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello")
+	server.Get("/api/v1/tiles/regions", s.handleGetRegions)
 }
 
 func (s *Service) handleGetRegions(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +45,7 @@ func (s *Service) handleGetRegions(w http.ResponseWriter, r *http.Request) {
 		packet := s.store.GetPacket(region)
 		packets = append(packets, packet)
 	}
+
 	output.WriteJSON(w, http.StatusOK, TileRegionPacketCollection{
 		Packets: packets,
 	})
