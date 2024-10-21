@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type TileMaterial int
+type TileMaterial uint8
 
 const (
 	TileMaterialStone TileMaterial = iota
@@ -18,7 +18,7 @@ var TileMaterials = []TileMaterial{TileMaterialStone, TileMaterialGrass, TileMat
 
 type TileContent struct {
 	Material TileMaterial `json:"material"`
-	ZLevel   int          `json:"zLevel"`
+	ZLevel   uint8        `json:"zLevel"`
 }
 
 type TileRegionPacket struct {
@@ -42,13 +42,13 @@ func (r *RegionQueryParam) Parse() (*TileRegion, error) {
 	if numParts := len(parts); numParts != 4 {
 		return nil, fmt.Errorf("expected 4 parts in region params, got %v", numParts)
 	}
-	intParts := [4]int{}
+	intParts := [4]int16{}
 	for i, part := range parts {
-		val, err := strconv.Atoi(part)
+		val, err := strconv.ParseInt(part, 10, 64)
 		if err != nil {
 			return nil, fmt.Errorf("all parts of query param must be an integer")
 		}
-		intParts[i] = val
+		intParts[i] = int16(val)
 	}
 	return &TileRegion{
 		StartX: intParts[0],
@@ -59,10 +59,10 @@ func (r *RegionQueryParam) Parse() (*TileRegion, error) {
 }
 
 type TileRegion struct {
-	StartX int `json:"startX"`
-	StartY int `json:"startY"`
-	EndX   int `json:"endX"`
-	EndY   int `json:"endY"`
+	StartX int16 `json:"startX"`
+	StartY int16 `json:"startY"`
+	EndX   int16 `json:"endX"`
+	EndY   int16 `json:"endY"`
 }
 
 func (r TileRegion) String() string {

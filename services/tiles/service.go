@@ -1,8 +1,10 @@
 package tiles
 
 import (
+	"bytes"
 	"database/sql"
 	"net/http"
+	"strings"
 
 	"github.com/mattkibbler/rivers-backend/api"
 	"github.com/mattkibbler/rivers-backend/output"
@@ -46,8 +48,17 @@ func (s *Service) handleGetRegions(w http.ResponseWriter, r *http.Request) {
 		packets = append(packets, packet)
 	}
 
-	output.WriteJSON(w, http.StatusOK, TileRegionPacketCollection{
-		Packets: packets,
-	})
+	acceptHeader := r.Header.Get("Accept")
+	if strings.Contains(acceptHeader, "application/octet-stream") {
+		var buf bytes.Buffer
+		encodeTileRegionPackets(&buf, TileRegionPacketCollection{
+			Packets: packets,
+		})
+		output.WriteBinary(w, http.StatusOK, buf.Bytes())
+	} else {
+		output.WriteJSON(w, http.StatusOK, TileRegionPacketCollection{
+			Packets: packets,
+		})
+	}
 
 }

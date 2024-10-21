@@ -20,12 +20,12 @@ func newPerlinNoiseGenerator() *perlin.Perlin {
 	return perlin.NewPerlin(alpha, beta, n, seed)
 }
 
-// Convert Perlin noise value (-1 to 1) to a height (0 to 256) as an integer
-func perlinNoiseToHeight(noise float64) int {
-	return int((noise + 1) / 2 * 256)
+// Convert Perlin noise value (-1 to 1) to a height (0 to 255) as an integer
+func perlinNoiseToHeight(noise float64) uint8 {
+	return uint8((noise + 1) / 2 * 255)
 }
 
-func GenerateTile(x int, y int) TileContent {
+func GenerateTile(x int16, y int16) TileContent {
 	// Add a scale factor to vary the input to the Perlin noise function
 	scale := 0.06 // Adjust this value to control the "zoom level" of the noise
 	// Pick a random index from the slice
