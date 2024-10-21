@@ -27,17 +27,4 @@ func (s *Store) GetPacket(region TileRegion) TileRegionPacket {
 		Region: region,
 		Data:   result,
 	}
-
-	// 		const result = [];
-	// 		for (let y = tileRegions[i].startY; y <= tileRegions[i].endY; y++) {
-	// 			const row = [];
-	// 			for (let x = tileRegions[i].startX; x <= tileRegions[i].endX; x++) {
-	// 				row.push(this.getTile(x, y));
-	// 			}
-	// 			result.push(row);
-	// 		}
-	// 		packets.push({
-	// 			data: result,
-	// 			region: tileRegions[i],
-	// 		});
 }
